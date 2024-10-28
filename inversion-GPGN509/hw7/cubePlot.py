@@ -57,6 +57,7 @@ def plot3D(x,y,z,fxyz,
     
     slices = []
       
+    
     # X slices
     if jx != None:
         Y,Z = np.meshgrid(y,z, indexing="ij")
