@@ -87,16 +87,74 @@ def depthFirstSearch(problem):
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     """
     "*** YOUR CODE HERE ***"
+
+    # print("Start:", problem.getStartState())
+    # print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
+    # print("Start's successors:", problem.getSuccessors(problem.getStartState()))
+
+    # Initialize the stack
+    stack = util.Stack()
+    stack.push((problem.getStartState(), [], 0))
+    visited = set()
+
+    while not stack.isEmpty():
+        state, actions, cost = stack.pop()
+
+        if problem.isGoalState(state):
+            return actions
+
+        if state not in visited:
+            visited.add(state)
+            for successor, action, stepCost in problem.getSuccessors(state):
+                new_actions = actions + [action]
+                stack.push((successor, new_actions, cost + stepCost))
+    
     util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
+    # Initialize the queue
+    queue = util.Queue()
+    queue.push((problem.getStartState(), [], 0))
+    visited = set()
+
+    while not queue.isEmpty():
+        state, actions, cost = queue.pop()  # FIFO order
+
+        if problem.isGoalState(state):
+            return actions
+
+        if state not in visited:
+            visited.add(state)
+            for successor, action, stepCost in problem.getSuccessors(state):
+                new_actions = actions + [action]
+                queue.push((successor, new_actions, cost + stepCost))  # Enqueue successor
+
     util.raiseNotDefined()
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
+
+    # Initialize the priority queue
+    pq = util.PriorityQueue()
+    pq.push((problem.getStartState(), [], 0), 0)
+    visited = set()
+
+    while not pq.isEmpty():
+        state, actions, cost = pq.pop()
+
+        if problem.isGoalState(state):
+            return actions
+
+        if state not in visited:
+            visited.add(state)
+            for successor, action, stepCost in problem.getSuccessors(state):
+                new_actions = actions + [action]
+                new_cost = cost + stepCost
+                pq.push((successor, new_actions, new_cost), new_cost)
+
     util.raiseNotDefined()
 
 def nullHeuristic(state, problem=None):
@@ -109,8 +167,27 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
 
+    # Initialize the priority queue
+    pq = util.PriorityQueue()
+    pq.push((problem.getStartState(), [], 0), 0)
+    visited = set()
+
+    while not pq.isEmpty():
+        state, actions, cost = pq.pop()
+
+        if problem.isGoalState(state):
+            return actions
+
+        if state not in visited:
+            visited.add(state)
+            for successor, action, stepCost in problem.getSuccessors(state):
+                new_actions = actions + [action]
+                new_cost = cost + stepCost
+                new_heuristic = heuristic(successor, problem)
+                pq.push((successor, new_actions, new_cost), new_cost + new_heuristic)
+
+    util.raiseNotDefined()
 
 # Abbreviations
 bfs = breadthFirstSearch
