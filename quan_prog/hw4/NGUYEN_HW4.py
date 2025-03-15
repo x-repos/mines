@@ -14,12 +14,10 @@ def create_oracle(marked_state):
     
     for i, bit in enumerate(marked_state):
         if bit == '0':
-            oracle.x(i)  # Apply X gate to flip 0 to 1
+            oracle.x(i)  
 
-    # Apply Multi-Controlled Z (MCZ) gate
     oracle.append(MCMTGate(ZGate(), n-1, 1), list(range(n)))
 
-    # Revert the X gates
     for i, bit in enumerate(marked_state):
         if bit == '0':
             oracle.x(i)
@@ -63,7 +61,7 @@ def experiment(marked_state, r_values):
         countslist.append(counts)
     return countslist
 
-marked_state = "0101"  # Example 4-bit marked state
+marked_state = "0101"  
 N = 2**len(marked_state)
 optimal_r = int(np.round(np.pi * np.sqrt(N) / 4))  # Best r = ⌊π√N / 4⌋
 
@@ -71,19 +69,14 @@ r_values = [optimal_r + i for i in range(-2, 4)]
 counts_list = experiment(marked_state, r_values)
 
 
-# Create a figure with multiple subplots
-fig, axes = plt.subplots(2, 3, figsize=(15, 10))  # 2 rows, 3 columns
-axes = axes.flatten()  # Convert the grid into a flat list for easy indexing
+fig, axes = plt.subplots(2, 3, figsize=(15, 10)) 
+axes = axes.flatten()  
 
-# Loop through the counts and plot them in the corresponding subplot
 for i, r in enumerate(r_values):
-    plot_histogram(counts_list[i], ax=axes[i])  # Assign histogram to the correct subplot
-    axes[i].set_title(f"r = {r}")  # Explicitly set subplot title
+    plot_histogram(counts_list[i], ax=axes[i])  
+    axes[i].set_title(f"r = {r}") 
 
-# Set the overall title for the figure
 fig.suptitle("Grover's Algorithm Results for Different r Values", fontsize=16, y=1.05)
-
-# Adjust layout for readability
 plt.tight_layout()
 plt.show()
 
