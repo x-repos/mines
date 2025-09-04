@@ -1,0 +1,13 @@
+[
+  {"Title": "The Shawshank Redemption", "Year": 1994, "Genre": "Drama", "Rating": 9.3},
+  {"Title": "The Godfather", "Year": 1972, "Genre": "Crime", "Rating": 9.2},
+  {"Title": "The Godfather: Part II", "Year": 1974, "Genre": "Crime", "Rating": 9.0},
+  {"Title": "The Dark Knight", "Year": 2008, "Genre": "Action", "Rating": 9.0},
+  {"Title": "12 Angry Men", "Year": 1957, "Genre": "Drama", "Rating": 8.9},
+  {"Title": "Schindler's List", "Year": 1993, "Genre": "Biography", "Rating": 8.9},
+  {"Title": "The Lord of the Rings: The Return of the King", "Year": 2003, "Genre": "Adventure", "Rating": 8.9},
+  {"Title": "Pulp Fiction", "Year": 1994, "Genre": "Crime", "Rating": 8.9},
+  {"Title": "The Good, the Bad and the Ugly", "Year": 1966, "Genre": "Western", "Rating": 8.8},
+  {"Title": "Fight Club", "Year": 1999, "Genre": "Drama", "Rating": 8.8}
+]
+

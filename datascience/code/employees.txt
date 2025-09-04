@@ -1,0 +1,11 @@
+Name|Age|Gender|Occupation|Salary
+John Doe|28|Male|Software Engineer|85000
+Jane Smith|34|Female|Data Scientist|95000
+Sam Brown|45|Male|Project Manager|105000
+Lisa White|29|Female|Designer|72000
+Tom Hanks|38|Male|Product Manager|98000
+Emily Jones|42|Female|Marketing Director|112000
+Chris Black|31|Male|Business Analyst|87000
+Patricia Green|50|Female|HR Manager|98000
+Michael Blue|27|Male|Software Engineer|83000
+Nancy Silver|36|Female|Sales Manager|90000
