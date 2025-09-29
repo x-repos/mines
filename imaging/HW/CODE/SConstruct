@@ -1,0 +1,26 @@
+import os,sys
+rsfroot = os.environ.get('RSFROOT') + '/'
+rsfsrc  = os.environ.get('RSFSRC') + '/'
+SConscript(rsfroot + 'api/c/SConstruct')
+
+sys.path.append(rsfsrc + 'framework')
+import bldutil
+env = bldutil.Debug()
+env.Append(   LIBS=[env.get('DYNLIB','')+'su',env.get('DYNLIB','')+'m'],
+           CPPPATH=[rsfroot+'include'],
+           LIBPATH=[rsfroot+'lib'])
+
+#
+# C mains
+#
+glob_build = False
+bindir = libdir = pkgdir = None
+targets = bldutil.UserSconsTargets()
+targets.c = \
+'''
+AFDM
+EFDM
+'''
+
+targets.build_all(env, glob_build, rsfroot, bindir, libdir, pkgdir)
+
