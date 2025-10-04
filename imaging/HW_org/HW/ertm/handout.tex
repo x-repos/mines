@@ -1,0 +1,33 @@
+\author{Robert Hooke}
+\title{GPGN658: Seismic Wavefield Imaging}{ERTM}
+
+% ------------------------------------------------------------
+Your assignment is to modify an \texttt{SConstruct} to combine the
+elastic FD modeling code modified in an earlier assignment in order to
+generate an image by reverse-time migration. Your task is to identify
+Madagascar programs necessary to implement reverse-time migration
+using appropriate \texttt{Flows} in
+\texttt{exercise/SConstruct}. Explain in detail how your imaging
+procedures work.
+
+% ------------------------------------------------------------
+\inputdir{exercise}
+% ------------------------------------------------------------
+\multiplot{2}{vp,vs}{width=0.45\textwidth}{Velocities.}
+\multiplot{1}{ro}{width=0.45\textwidth}{Density.}
+\plot{dpo}{width=\textwidth}{Data -- potentials.}
+\multiplot{2}{imgPP,imgPS,imgSP,imgSS}{width=0.45\textwidth}{Images (PP,PS,SP,SS).}
+
+% ------------------------------------------------------------
+\input{../logistics}
+\input{../wrapup}
+\input{../honor}
+
+% ------------------------------------------------------------
+%\newpage
+%\section{Answer}
+%\tiny
+%\lstinputlisting{exercise/SConstruct}
+%\normalsize
+
+

@@ -33,6 +33,7 @@ int main(int argc, char* argv[])
     sf_file Fsou=NULL; /* sources   */
     sf_file Frec=NULL; /* receivers */
     sf_file Fvel=NULL; /* velocity  */
+    sf_file Fden=NULL; /* density   */
     sf_file Fdat=NULL; /* data      */
     sf_file Fwfl=NULL; /* wavefield */
 
@@ -57,7 +58,9 @@ int main(int argc, char* argv[])
 
     float **tt=NULL;
     float **vp=NULL;           /* velocity */
+    float **ro=NULL;           /* density  */
     float **vt=NULL;           /* temporary vp*vp * dt*dt */
+    
 
     /* wavefield: um = U @ t-1; uo = U @ t; up = U @ t+1 */
     float **um,**uo,**up,**ua,**ut; 
@@ -95,6 +98,7 @@ int main(int argc, char* argv[])
     /* I/O files */
     Fwav = sf_input ("in" ); /* wavelet   */
     Fvel = sf_input ("vel"); /* velocity  */
+    Fden = sf_input ("den"); /* density   */
     Fsou = sf_input ("sou"); /* sources   */
     Frec = sf_input ("rec"); /* receivers */
     Fdat = sf_output("out"); /* data      */
@@ -205,9 +209,31 @@ int main(int argc, char* argv[])
     tt = sf_floatalloc2(     nz,        nx   ); 
     vp = sf_floatalloc2(fdm->nzpad,fdm->nxpad); 
     vt = sf_floatalloc2(fdm->nzpad,fdm->nxpad); 
+    ro = sf_floatalloc2(fdm->nzpad,fdm->nxpad);
+
+
+
 
     /* input velocity */
     sf_floatread(tt[0],nz*nx,Fvel );    expand(tt,vp,fdm);
+
+    /* input density */
+    sf_floatread(tt[0],nz*nx,Fden );    expand(tt,ro,fdm);
+    
+
+    /* Debug: write velocity and density to binary files */
+    // FILE *fp_vp  = fopen("vp.bin","wb");
+    // FILE *fp_ro = fopen("ro.bin","wb");
+
+    // for (int ix = 0; ix < nx; ix++) {
+    //     fwrite(&vp[ix+fdm->nb][fdm->nb], sizeof(float), nz, fp_vp);
+    //     fwrite(&ro[ix+fdm->nb][fdm->nb], sizeof(float), nz, fp_ro);
+    // }
+
+    // fclose(fp_vp);
+    // fclose(fp_ro);
+
+
     /* precompute vp^2 * dt^2 */
     for    (ix=0; ix<fdm->nxpad; ix++) {
 	for(iz=0; iz<fdm->nzpad; iz++) {
@@ -231,6 +257,9 @@ int main(int argc, char* argv[])
     uo=sf_floatalloc2(fdm->nzpad,fdm->nxpad);
     up=sf_floatalloc2(fdm->nzpad,fdm->nxpad);
     ua=sf_floatalloc2(fdm->nzpad,fdm->nxpad);
+
+
+    // D
 
     for    (ix=0; ix<fdm->nxpad; ix++) {
 	for(iz=0; iz<fdm->nzpad; iz++) {
@@ -262,18 +291,26 @@ int main(int argc, char* argv[])
 #pragma omp parallel for				\
     schedule(dynamic,fdm->ompchunk)			\
     private(ix,iz)					\
-    shared(fdm,ua,uo,co,cax,caz,cbx,cbz,idx,idz)
+    shared(fdm,ua,uo,ro,co,cax,caz,cbx,cbz,idx,idz)
 #endif
 	for    (ix=NOP; ix<fdm->nxpad-NOP; ix++) {
 	    for(iz=NOP; iz<fdm->nzpad-NOP; iz++) {
 		
-		/* 4th order Laplacian operator */
-		ua[ix][iz] = 
-		    co * uo[ix  ][iz  ] + 
-		    cax*(uo[ix-1][iz  ] + uo[ix+1][iz  ]) +
-		    cbx*(uo[ix-2][iz  ] + uo[ix+2][iz  ]) +
-		    caz*(uo[ix  ][iz-1] + uo[ix  ][iz+1]) +
-		    cbz*(uo[ix  ][iz-2] + uo[ix  ][iz+2]);		
+            /* 4th order Laplacian operator */
+            float lap =
+                co * uo[ix  ][iz  ] + 
+                cax*(uo[ix-1][iz  ] + uo[ix+1][iz  ]) +
+                cbx*(uo[ix-2][iz  ] + uo[ix+2][iz  ]) +
+                caz*(uo[ix  ][iz-1] + uo[ix  ][iz+1]) +
+                cbz*(uo[ix  ][iz-2] + uo[ix  ][iz+2]);		
+
+            /* gradient dot product term */
+            float grad_dot = DX(ro, ix, iz, idx) * DX(uo, ix, iz, idx)
+                        + DZ(ro, ix, iz, idz) * DZ(uo, ix, iz, idz);
+
+            ua[ix][iz] = 
+                lap - grad_dot / (ro[ix][iz] + 1e-10);
+
 	    }
 	}   
 
@@ -337,6 +374,7 @@ int main(int argc, char* argv[])
 
     free(*vp);  free(vp);
     free(*vt);  free(vt);
+    free(*ro);  free(ro);
 
     free(ww);
     free(ss);

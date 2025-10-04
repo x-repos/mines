@@ -1,0 +1,85 @@
+## 
+# GPGN658 - acoustic RTM
+##
+from rsf.proj import *
+import awe,geom,wplot,pcsutil
+
+# ------------------------------------------------------------
+par = dict(
+    nx=600,  ox=0, dx=0.002,  lx='x', ux='km',
+    ny=1,    oy=0, dy=0.002,  ly='y', uy='km',
+    nz=350,  oz=0, dz=0.002,  lz='z', uz='km',
+    nt=4001, ot=0, dt=0.0002, lt='t', ut='s',
+    kt=150,nb=100,jsnap=100,frq=30
+    )
+awe.param(par)
+wplot.param(par)
+
+# ------------------------------------------------------------
+# acoustic source
+awe.wavelet('wav',par['frq'],'',par)
+Result('wav','transp |' + wplot.waveplot('',par))
+
+# ------------------------------------------------------------
+# source coordinates
+par['xsou']=par['ox']+par['nx']/2*par['dx']
+par['zsou']=par['oz']+10*par['dz']
+geom.point2d('ss',par['xsou'],par['zsou'],'',par)
+
+# receiver coordinates
+par['zrec']=par['oz']+10*par['dz']
+geom.horizontal2d('rr',par['zrec'],'',par)
+
+# plots
+Plot('ss',wplot.ssplot2d('',par))
+Plot('rr',wplot.rrplot2d('',par))
+
+# ------------------------------------------------------------
+pcsutil.angline('dip',
+                0.1,par['ox'],
+                +45,
+                0,1,
+                par['nz']  ,par['oz'],par['dz'],
+                par['nx']/2,par['ox'],par['dx'])
+Flow('con','dip','math output=0')
+
+# ------------------------------------------------------------
+# Density (kg/km^3)
+Flow('ro',['dip','con'],
+     'cat axis=2 space=n ${SOURCES[1]} | add add=1 | reverse which=2 opt=i'%par)
+Flow('roCON','ro','math output=1')
+
+# P velocity (km/s)
+Flow('vp',['dip','con'],
+     'cat axis=2 space=n ${SOURCES[1]} | add add=2'%par)
+Flow('vpCON','vp','math output=2')
+
+# plots
+for i in (['vp','ro']):
+    Plot(i,wplot.igrey2d('mean=y',par))
+    Result(i,[i,'rr','ss'],'Overlay')
+
+# ------------------------------------------------------------
+# acoustic FDM
+def afdm(dat,wfl,wav,vel,den,sou,rec,custom,par):
+    Flow([dat,wfl],[wav,vel,den,sou,rec],
+         '''
+         ./CODE/AFDM.x 
+         verb=y dabc=y snap=y jsnap=%(jsnap)d nb=%(nb)d
+         vel=${SOURCES[1]}
+         den=${SOURCES[2]}
+         sou=${SOURCES[3]}
+         rec=${SOURCES[4]}
+         wfl=${TARGETS[1]}
+         '''%par + custom)
+
+afdm(  'dat','wfl','wav','vp','ro','ss','rr','',par)
+Result('dat','transp |'+ wplot.dgrey2d('pclip=99.0',par))
+
+# ------------------------------------------------------------
+# ------------------------------------------------------------
+# ------------------------------------------------------------
+# ------------------------------------------------------------
+# acoustic RTM
+
+End()
