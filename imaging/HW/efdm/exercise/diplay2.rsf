@@ -1,12 +1,12 @@
 0 0 0.598 0.6980000000000001 in=dipinp2.rsf data_format=ascii_float n1=2 n2=2 --out=/home/x/rsfdata/HW/efdm/exercise/dipinp2.rsf@
-4.3-git	sfdd	HW/efdm/exercise:	x@ubuntu	Mon Sep 29 16:03:29 2025
+4.3-git	sfdd	HW/efdm/exercise:	x@ubuntu	Mon Oct  6 21:03:38 2025
 
 	data_format="native_float"
 	esize=4
 	in="stdout"
 	in="stdin"
 
-4.3-git	sfspline	HW/efdm/exercise:	x@ubuntu	Mon Sep 29 16:03:29 2025
+4.3-git	sfspline	HW/efdm/exercise:	x@ubuntu	Mon Oct  6 21:03:38 2025
 
 	o1=0
 	n2=1

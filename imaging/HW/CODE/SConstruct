@@ -6,6 +6,15 @@ SConscript(rsfroot + 'api/c/SConstruct')
 sys.path.append(rsfsrc + 'framework')
 import bldutil
 env = bldutil.Debug()
+
+# Add OpenMP support for parallel execution
+env.Append(CCFLAGS=['-fopenmp'])
+env.Append(LINKFLAGS=['-fopenmp'])
+
+# Add MPI support (optional - uncomment if you have MPI)
+# env['CC'] = 'mpicc'
+# env.Append(CCFLAGS=['-DMPI'])
+
 env.Append(   LIBS=[env.get('DYNLIB','')+'su',env.get('DYNLIB','')+'m'],
            CPPPATH=[rsfroot+'include'],
            LIBPATH=[rsfroot+'lib'])

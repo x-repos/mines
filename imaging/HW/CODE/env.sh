@@ -7,4 +7,4 @@ export MANPATH="$RSFROOT/share/man:${MANPATH:-}"
 export RSFSRC="$HOME/Programs/madagascar-4.2-src"  
 export PYTHONPATH="$HOME/Workspace/mines/imaging/HW/CODE:$RSFSRC/book/Recipes:${PYTHONPATH:-}"
 export TEXINPUTS=".:$RSFSRC/texmf//:${TEXINPUTS:-}"
-
+export OMP_NUM_THREADS=6

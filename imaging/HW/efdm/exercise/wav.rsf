@@ -1,4 +1,4 @@
-4.3-git	sfspike	HW/efdm/exercise:	x@ubuntu	Mon Sep 29 16:03:29 2025
+4.3-git	sfspike	HW/efdm/exercise:	x@ubuntu	Mon Oct  6 21:03:38 2025
 
 	o1=0
 	label1="Time"
@@ -10,7 +10,7 @@
 	n1=8001
 	in="stdin"
 
-4.3-git	sfpad	HW/efdm/exercise:	x@ubuntu	Mon Sep 29 16:03:29 2025
+4.3-git	sfpad	HW/efdm/exercise:	x@ubuntu	Mon Oct  6 21:03:38 2025
 
 	end1=8001
 	data_format="native_float"
@@ -19,14 +19,14 @@
 	n1=16002
 	in="stdin"
 
-4.3-git	sfricker1	HW/efdm/exercise:	x@ubuntu	Mon Sep 29 16:03:29 2025
+4.3-git	sfricker1	HW/efdm/exercise:	x@ubuntu	Mon Oct  6 21:03:38 2025
 
 	data_format="native_float"
 	esize=4
 	in="stdout"
 	in="stdin"
 
-4.3-git	sfwindow	HW/efdm/exercise:	x@ubuntu	Mon Sep 29 16:03:29 2025
+4.3-git	sfwindow	HW/efdm/exercise:	x@ubuntu	Mon Oct  6 21:03:38 2025
 
 	o1=0
 	label1="Time"
@@ -38,14 +38,14 @@
 	n1=8001
 	in="stdin"
 
-4.3-git	sfscale	HW/efdm/exercise:	x@ubuntu	Mon Sep 29 16:03:29 2025
+4.3-git	sfscale	HW/efdm/exercise:	x@ubuntu	Mon Oct  6 21:03:38 2025
 
 	data_format="native_float"
 	esize=4
 	in="stdout"
 	in="stdin"
 
-4.3-git	sfput	HW/efdm/exercise:	x@ubuntu	Mon Sep 29 16:03:29 2025
+4.3-git	sfput	HW/efdm/exercise:	x@ubuntu	Mon Oct  6 21:03:38 2025
 
 	label1=t
 	data_format="native_float"
@@ -53,7 +53,7 @@
 	unit1=s
 	in="stdin"
 
-4.3-git	sftransp	HW/efdm/exercise:	x@ubuntu	Mon Sep 29 16:03:29 2025
+4.3-git	sftransp	HW/efdm/exercise:	x@ubuntu	Mon Oct  6 21:03:38 2025
 
 	d2=0.0002
 	n2=8001
@@ -64,7 +64,7 @@
 	in="/home/x/rsfdata/HW/efdm/exercise/tmp.rsf@"
 	unit2="s"
 	n1=1
-4.3-git	sfwindow	HW/efdm/exercise:	x@ubuntu	Mon Sep 29 16:03:29 2025
+4.3-git	sfwindow	HW/efdm/exercise:	x@ubuntu	Mon Oct  6 21:03:38 2025
 
 	d2=0.0002
 	n2=8001
@@ -82,7 +82,7 @@
 	n1=1
 	in="stdin"
 
-4.3-git	sfmath	HW/efdm/exercise:	x@ubuntu	Mon Sep 29 16:03:29 2025
+4.3-git	sfmath	HW/efdm/exercise:	x@ubuntu	Mon Oct  6 21:03:38 2025
 
 	x2=2
 	input=0
@@ -90,7 +90,7 @@
 	esize=4
 	in="/home/x/rsfdata/HW/efdm/exercise/one.rsf@"
 	x1=1
-4.3-git	sfcat	HW/efdm/exercise:	x@ubuntu	Mon Sep 29 16:03:29 2025
+4.3-git	sfcat	HW/efdm/exercise:	x@ubuntu	Mon Oct  6 21:03:38 2025
 
 	data_format="native_float"
 	esize=4
@@ -98,7 +98,7 @@
 	n1=2
 	in="stdin"
 
-4.3-git	sftransp	HW/efdm/exercise:	x@ubuntu	Mon Sep 29 16:03:29 2025
+4.3-git	sftransp	HW/efdm/exercise:	x@ubuntu	Mon Oct  6 21:03:38 2025
 
 	n2=1
 	d3=0.0002
@@ -111,7 +111,7 @@
 	unit3="s"
 	in="stdin"
 
-4.3-git	sftransp	HW/efdm/exercise:	x@ubuntu	Mon Sep 29 16:03:29 2025
+4.3-git	sftransp	HW/efdm/exercise:	x@ubuntu	Mon Oct  6 21:03:38 2025
 
 	o1=0
 	d2=0.0002
@@ -128,7 +128,7 @@
 	n1=1
 	in="stdin"
 
-4.3-git	sfput	HW/efdm/exercise:	x@ubuntu	Mon Sep 29 16:03:29 2025
+4.3-git	sfput	HW/efdm/exercise:	x@ubuntu	Mon Oct  6 21:03:38 2025
 
 	in="/home/x/rsfdata/HW/efdm/exercise/wav.rsf@"
 	label1=

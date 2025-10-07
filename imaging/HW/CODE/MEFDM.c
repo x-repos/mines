@@ -34,6 +34,12 @@
 								       C2*(a[ix  ][iz+1] - a[ix  ][iz-2]) +	\
                        C1*(a[ix  ][iz  ] - a[ix  ][iz-1])  )*s
 
+
+/* center FD derivative stencils */
+#define Cx(a,ix,iz,s) (0.5f*(Fx(a,ix,iz,s) + Bx(a,ix,iz,s)))
+#define Cz(a,ix,iz,s) (0.5f*(Fz(a,ix,iz,s) + Bz(a,ix,iz,s)))
+
+
 /*------------------------------------------------------------*/
 
 int main(int argc, char* argv[])
@@ -49,6 +55,7 @@ int main(int argc, char* argv[])
     sf_file Fden=NULL; /* density   */
     sf_file Fdat=NULL; /* data      */
     sf_file Fwfl=NULL; /* wavefield */
+    sf_file Fwpo=NULL; /* wavefield P- and S-like */
 
     /* cube axes */
     sf_axis at,ax,az;
@@ -106,6 +113,9 @@ int main(int argc, char* argv[])
     float     dqz,dqx;
     float     **uc=NULL;
 
+    float **divu, **rotu;
+
+
     /*------------------------------------------------------------*/
     /* init RSF */
     sf_init(argc,argv);
@@ -122,6 +132,11 @@ int main(int argc, char* argv[])
     if(! sf_getbool("ssou",&ssou)) ssou=false; /* stress source */
     if(! sf_getbool("dabc",&dabc)) dabc=false; /* absorbing BC */
 
+    /* top: */
+    bool opot=false;
+    if(! sf_getbool("opot",&opot)) opot=false;
+
+
     /*------------------------------------------------------------*/
     /* I/O files */
     Fwav = sf_input ("in" ); /* wavelet   */
@@ -130,8 +145,13 @@ int main(int argc, char* argv[])
     Fsou = sf_input ("sou"); /* sources   */
     Frec = sf_input ("rec"); /* receivers */
     Fdat = sf_output("out"); /* data      */
-    if(snap)
-	    Fwfl = sf_output("wfl"); /* wavefield */
+    if(snap){
+        char *wflname=NULL, *wponame=NULL;
+        if(NULL==(wflname=sf_getstring("wfl"))) wflname="wfl";
+        if(NULL==(wponame=sf_getstring("wpo"))) wponame="wpo";
+        Fwfl = sf_output(wflname); /* wavefield */
+        Fwpo = sf_output(wponame); /* wavefield P- and S-like */
+    }
 
     /*------------------------------------------------------------*/
     /* axes */
@@ -198,6 +218,11 @@ int main(int argc, char* argv[])
 	sf_oaxa(Fwfl,acx,2);
 	sf_oaxa(Fwfl,ac, 3);
 	sf_oaxa(Fwfl,at, 4);
+
+	sf_oaxa(Fwpo,acz,1);
+	sf_oaxa(Fwpo,acx,2);
+	sf_oaxa(Fwpo,ac, 3);
+	sf_oaxa(Fwpo,at, 4);
     }
 
     /*------------------------------------------------------------*/
@@ -262,7 +287,7 @@ int main(int argc, char* argv[])
 	for    (ix=0; ix<fdm->nxpad; ix++) {
 	    for(iz=0; iz<fdm->nzpad; iz++) {
 		vp[ix][iz] = sqrt( c11[ix][iz]/ro[ix][iz] );
-		vs[ix][iz] = sqrt( c13[ix][iz]/ro[ix][iz] );
+		vs[ix][iz] = sqrt( c55[ix][iz]/ro[ix][iz] );  /* Fixed: should be c55, not c13 */
 	    }
 	}
 
@@ -296,6 +321,9 @@ int main(int argc, char* argv[])
     tzz=sf_floatalloc2(fdm->nzpad,fdm->nxpad);
     tzx=sf_floatalloc2(fdm->nzpad,fdm->nxpad);
     txx=sf_floatalloc2(fdm->nzpad,fdm->nxpad);
+
+    divu=sf_floatalloc2(fdm->nzpad,fdm->nxpad);
+    rotu=sf_floatalloc2(fdm->nzpad,fdm->nxpad);
 
     for    (ix=0; ix<fdm->nxpad; ix++) {
 	    for(iz=0; iz<fdm->nzpad; iz++) {
@@ -463,6 +491,16 @@ int main(int argc, char* argv[])
 	    sponge2d_apply(uox,spo,fdm);
 	}
 
+#pragma omp parallel for schedule(dynamic, fdm->ompchunk) private(ix,iz)
+    for (ix = NOP; ix < fdm->nxpad - NOP; ++ix){
+        for (iz = NOP; iz < fdm->nzpad - NOP; ++iz){
+            divu[ix][iz] = Cx(uox, ix, iz, idx) + Cz(uoz, ix, iz, idz);        /* ∇·u  (P-like) */
+            rotu[ix][iz] = Cz(uox, ix, iz, idz) - Cx(uoz, ix, iz, idx);        /* (∇×u)_y (S-like) */
+        }
+    }
+
+
+
 	/*------------------------------------------------------------*/
 	/* cut wavefield and save */
 	/*------------------------------------------------------------*/
@@ -472,11 +510,33 @@ int main(int argc, char* argv[])
 
 	    cut2d(uox,uc,fdm,acz,acx);
 	    sf_floatwrite(uc[0],sf_n(acz)*sf_n(acx),Fwfl);
+
+        /* cut divergence and rotation */
+        cut2d(divu,uc,fdm,acz,acx);
+        sf_floatwrite(uc[0],sf_n(acz)*sf_n(acx),Fwpo);
+        cut2d(rotu,uc,fdm,acz,acx);
+        sf_floatwrite(uc[0],sf_n(acz)*sf_n(acx),Fwpo);
+
 	}
 
-	lint2d_extract(uoz,dd[0],cr);
-	lint2d_extract(uox,dd[1],cr);
-	if(it%jdata==0) sf_floatwrite(dd[0],nr*nc,Fdat);
+	// lint2d_extract(uoz,dd[0],cr);
+	// lint2d_extract(uox,dd[1],cr);
+	// if(it%jdata==0) sf_floatwrite(dd[0],nr*nc,Fdat);
+
+    /* choose what the seismogram contains */
+    if (opot) {
+        /* potentials-based seismogram: dd[0]=div u (P-like), dd[1]=rot u (S-like) */
+        lint2d_extract(divu,dd[0],cr);
+        lint2d_extract(rotu,dd[1],cr);
+    } else {
+        /* displacement-based seismogram: dd[0]=u_z, dd[1]=u_x */
+        lint2d_extract(uoz,dd[0],cr);
+        lint2d_extract(uox,dd[1],cr);
+    }
+    if(it%jdata==0) sf_floatwrite(dd[0],nr*nc,Fdat);
+
+
+
 
     }
     if(verb) fprintf(stderr,"\n");
@@ -508,6 +568,9 @@ int main(int argc, char* argv[])
     free(*tzz); free(tzz);
     free(*txx); free(txx);
     free(*tzx); free(tzx);
+
+    free(*divu); free(divu);
+    free(*rotu); free(rotu);
 
     if(snap) {
 	free(*uc);  free(uc);
