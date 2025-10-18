@@ -1,7 +1,9 @@
 import os,sys
 rsfroot = os.environ.get('RSFROOT') + '/'
 rsfsrc  = os.environ.get('RSFSRC') + '/'
-SConscript(rsfroot + 'api/c/SConstruct')
+
+# 🔧 CHANGED: use rsfsrc instead of rsfroot so it can find api/c/SConstruct
+SConscript(rsfsrc + 'api/c/SConstruct', must_exist=False)
 
 sys.path.append(rsfsrc + 'framework')
 import bldutil
@@ -15,9 +17,12 @@ env.Append(LINKFLAGS=['-fopenmp'])
 # env['CC'] = 'mpicc'
 # env.Append(CCFLAGS=['-DMPI'])
 
-env.Append(   LIBS=[env.get('DYNLIB','')+'su',env.get('DYNLIB','')+'m'],
-           CPPPATH=[rsfroot+'include'],
-           LIBPATH=[rsfroot+'lib'])
+# 🔧 CHANGED: link against rsf (Madagascar), not su
+env.Append(
+    LIBS=[env.get('DYNLIB','')+'rsf', env.get('DYNLIB','')+'m'],
+    CPPPATH=[rsfroot+'include'],
+    LIBPATH=[rsfroot+'lib']
+)
 
 #
 # C mains
@@ -31,5 +36,4 @@ AFDM
 EFDM
 '''
 
-targets.build_all(env, glob_build, rsfroot, bindir, libdir, pkgdir)
-
+targets.build_all(env, glob_build, rsfsrc, bindir, libdir, pkgdir)  # optional: rsfsrc safer than rsfroot

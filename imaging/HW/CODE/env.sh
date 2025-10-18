@@ -1,10 +1,10 @@
-export RSFROOT="$HOME/Programs/madagascar-4.2"
+export RSFROOT="$HOME/Programs/madagascar"
+export RSFSRC="$RSFROOT/src"
 export PATH="$RSFROOT/bin:$PATH"
 export LD_LIBRARY_PATH="$RSFROOT/lib:${LD_LIBRARY_PATH:-}"
-export PYTHONPATH="$RSFROOT/lib/python3.12/site-packages:${PYTHONPATH:+$PYTHONPATH:}$RSFROOT/lib"
-export DATAPATH="$HOME/rsfdata/"
 export MANPATH="$RSFROOT/share/man:${MANPATH:-}"
-export RSFSRC="$HOME/Programs/madagascar-4.2-src"  
-export PYTHONPATH="$HOME/Workspace/mines/imaging/HW/CODE:$RSFSRC/book/Recipes:${PYTHONPATH:-}"
+export DATAPATH="$HOME/rsfdata/"
 export TEXINPUTS=".:$RSFSRC/texmf//:${TEXINPUTS:-}"
-export OMP_NUM_THREADS=6
+export PYTHONPATH="$RSFROOT/lib/python3.13/site-packages:$RSFROOT/lib:$HOME/Workspace/mines/imaging/HW/CODE:$RSFSRC/book/Recipes:${PYTHONPATH:-}"
+export OMP_NUM_THREADS=16
+

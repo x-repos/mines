@@ -178,5 +178,14 @@ for homework in glob.glob('homework*.tex'):
             options='10pt,usenames',
             use='graphicx,color,amsmath,amssymb,amsbsy,framed,listings')
 
-
 End()
+
+# Add DVI to PDF conversion step for handouts
+# This is needed because the build system doesn't have epstopdf installed
+for handout in glob.glob('handout*.tex'):
+    name = os.path.splitext(handout)[0]
+    # Use AddPostAction to convert DVI to PDF after the main build
+    dvi = name + '.dvi'
+    pdf = name + '.pdf'
+    if os.path.exists(dvi) or True:  # Always add the rule
+        AddPostAction(dvi, 'dvipdf $TARGET ' + pdf)

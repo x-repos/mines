@@ -1,0 +1,143 @@
+4.3-git	sfspike	HW/artm/exercise:	x@ben	Fri Oct 17 20:21:31 2025
+
+	o1=0
+	label1="Time"
+	data_format="native_float"
+	esize=4
+	in="stdout"
+	unit1="s"
+	d1=0.0002
+	n1=4001
+	in="stdin"
+
+4.3-git	sfpad	HW/artm/exercise:	x@ben	Fri Oct 17 20:21:31 2025
+
+	end1=4001
+	data_format="native_float"
+	esize=4
+	in="stdout"
+	n1=8002
+	in="stdin"
+
+4.3-git	sfricker1	HW/artm/exercise:	x@ben	Fri Oct 17 20:21:31 2025
+
+	data_format="native_float"
+	esize=4
+	in="stdout"
+	in="stdin"
+
+4.3-git	sfwindow	HW/artm/exercise:	x@ben	Fri Oct 17 20:21:31 2025
+
+	o1=0
+	label1="Time"
+	data_format="native_float"
+	esize=4
+	in="stdout"
+	unit1="s"
+	d1=0.0002
+	n1=4001
+	in="stdin"
+
+4.3-git	sfscale	HW/artm/exercise:	x@ben	Fri Oct 17 20:21:31 2025
+
+	data_format="native_float"
+	esize=4
+	in="stdout"
+	in="stdin"
+
+4.3-git	sfput	HW/artm/exercise:	x@ben	Fri Oct 17 20:21:31 2025
+
+	label1=t
+	data_format="native_float"
+	in="stdout"
+	unit1=s
+	in="stdin"
+
+4.3-git	sftransp	HW/artm/exercise:	x@ben	Fri Oct 17 20:21:31 2025
+
+	d2=0.0002
+	n2=4001
+	o2=0
+	data_format="native_float"
+	label2="t"
+	esize=4
+	in="/home/x/rsfdata/HW/artm/exercise/wav.rsf@"
+	unit2="s"
+	n1=1
+4.3-git	sfAFDM	HW/artm/exercise:	x@ben	Fri Oct 17 20:21:31 2025
+
+	d2=0.002
+	n2=600
+	o1=0
+	d3=0.0008
+	n3=1001
+	o2=0
+	label1=""
+	data_format="native_float"
+	o3=0
+	label2=""
+	label3="t"
+	esize=4
+	in="/home/x/rsfdata/HW/artm/exercise/wfl.rsf@"
+	unit1=""
+	unit2=""
+	unit3="s"
+	d1=0.002
+	n1=350
+4.3-git	sffft1	HW/artm/exercise:	x@ben	Fri Oct 17 20:21:46 2025
+
+	o1=0
+	label1="Wavenumber"
+	data_format="native_complex"
+	fft_n1=350
+	esize=8
+	fft_o1=0
+	in="/home/x/rsfdata/HW/artm/exercise/wfl_fft.rsf@"
+	fft_label1=""
+	unit1="1/"
+	d1=1.42857
+	n1=176
+4.3-git	sfmath	HW/artm/exercise:	x@ben	Fri Oct 17 20:23:53 2025
+
+	x2=2
+	input=0
+	x3=3
+	data_format="native_complex"
+	I=4
+	esize=8
+	in="/home/x/rsfdata/HW/artm/exercise/img_den.rsf@"
+	x1=1
+4.3-git	sfmath	HW/artm/exercise:	x@ben	Fri Oct 17 20:24:16 2025
+
+	x2=2
+	input=0
+	x3=3
+	data_format="native_complex"
+	I=4
+	esize=8
+	in="/home/x/rsfdata/HW/artm/exercise/img_den_abs.rsf@"
+	x1=1
+4.3-git	sfstack	HW/artm/exercise:	x@ben	Fri Oct 17 20:24:21 2025
+
+	d2=0.0008
+	n2=1001
+	n3=1
+	o2=0
+	data_format="native_complex"
+	label2="t"
+	esize=8
+	in="stdout"
+	unit2="s"
+	in="stdin"
+
+4.3-git	sfstack	HW/artm/exercise:	x@ben	Fri Oct 17 20:24:24 2025
+
+	d2=0.0008
+	n2=1
+	n3=1
+	o2=0
+	data_format="native_complex"
+	label2="t"
+	esize=8
+	in="/home/x/rsfdata/HW/artm/exercise/img_den_max.rsf@"
+	unit2="s"

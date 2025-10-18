@@ -76,7 +76,7 @@ def afdm(dat,wfl,wav,vel,den,sou,rec,custom,par):
 afdm(  'dat','wfl','wav','vp','ro','ss','rr','',par)
 Result('dat','transp |'+ wplot.dgrey2d('pclip=99',par))
 
-Result('wfl','window n3=1 f3=28|' + wplot.igrey2d('pclip=99.9',par))
-Result('wflmovie','wfl',            wplot.igrey2d('pclip=99.9',par))
+Result('wfl','window n3=1 f3=28|' + wplot.igrey2d('pclip=99.',par))
+Result('wflmovie','wfl',            wplot.igrey2d('pclip=99.',par))
 
 End()
