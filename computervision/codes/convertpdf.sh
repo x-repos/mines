@@ -1,1 +1,0 @@
-jupyter nbconvert --to pdf hw9.ipynb
